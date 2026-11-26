@@ -11,8 +11,6 @@ Perangkat	Port Switch	VLAN	IP
 enable
 configure terminal
 hostname SW-WISATA
-
-! --- VLAN ---
 vlan 10
  name MANAJEMEN
 vlan 20
@@ -20,10 +18,8 @@ vlan 20
 vlan 30
  name PENGUNJUNG
 exit
-
-! --- Layer 3 (gateway tiap VLAN) ---
+Layer 3 (gateway tiap VLAN)
 ip routing
-
 interface vlan 10
  ip address 192.168.10.1 255.255.255.0
  no shutdown
@@ -36,48 +32,38 @@ interface vlan 30
  ip helper-address 192.168.10.10
  no shutdown
 exit
-
-! --- Port Server0 ---
+Port Server0 
 interface fa0/1
  switchport mode access
  switchport access vlan 10
  no shutdown
-
-! --- Port WLC (trunk) ---
+Port WLC (trunk) 
 interface fa0/2
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 10
  switchport trunk allowed vlan 10,20,30
  no shutdown
-
-! --- Port AP (PoE otomatis aktif) ---
+Port AP (PoE otomatis aktif) 
 interface fa0/3
  switchport mode access
  switchport access vlan 20
  no shutdown
-
-! --- Port PC admin ---
+Port PC admin 
 interface fa0/4
  switchport mode access
  switchport access vlan 10
  no shutdown
 end
 write memory
-
 💡 ip helper-address meneruskan permintaan DHCP dari VLAN 20 dan 30 ke Server0 yang berada di VLAN 10.
-
 2️⃣ Server0 🗄️ (tab Config)
-
 FastEthernet0
-
 🌐 IP Address: 192.168.10.10
 🌐 Subnet Mask: 255.255.255.0
 🚪 Default Gateway: 192.168.10.1
 🔍 DNS Server: 192.168.10.10
-
 Services > DHCP (hidupkan Service: On, lalu buat 2 pool):
-
 Field	Pool AP	Pool Pengunjung
 Pool Name	POOL-AP	POOL-WISATA
 Default Gateway	192.168.20.1	192.168.30.1
@@ -86,30 +72,22 @@ Start IP	192.168.20.10	192.168.30.10
 Subnet Mask	255.255.255.0	255.255.255.0
 Max User	50	200
 WLC Address	192.168.10.2	(kosongkan)
-
 Klik Add pada tiap pool 💾. Kolom WLC Address penting agar AP bisa menemukan controller. 🔎
-
 3️⃣ PC0 💻 (tab Desktop > IP Configuration)
 🌐 IP Address: 192.168.10.50
 🌐 Subnet Mask: 255.255.255.0
 🚪 Default Gateway: 192.168.10.1
 🔍 DNS Server: 192.168.10.10
 4️⃣ WLC-2504 🖥️
-
 A. Alamat manajemen (tab Config > Management)
-
 🌐 IP Address: 192.168.10.2
 🌐 Subnet Mask: 255.255.255.0
 🚪 Gateway: 192.168.10.1
-
 B. Buka antarmuka web dari PC0 🌍
-
 Desktop > Web Browser > buka http://192.168.10.2
 👤 Username: admin
 🔑 Password: Cisco123 (default Packet Tracer)
-
 C. Buat interface VLAN pengunjung (menu CONTROLLER > Interfaces > New)
-
 🏷️ Interface Name: PENGUNJUNG
 🔢 VLAN ID: 30
 🌐 IP Address: 192.168.30.2
@@ -117,9 +95,7 @@ C. Buat interface VLAN pengunjung (menu CONTROLLER > Interfaces > New)
 🚪 Gateway: 192.168.30.1
 📨 Primary DHCP Server: 192.168.10.10
 Klik Apply ✅
-
 D. Buat WLAN / SSID (menu WLANs > Create New > Go)
-
 📛 Profile Name: Wisata-Alam
 📶 SSID: Wisata-Alam
 🔢 ID: 1
@@ -149,3 +125,5 @@ Uji	Perintah / Cara	Hasil yang diharapkan
 🔸 Pastikan ip helper-address ada di VLAN 20.
 🔸 Pastikan ping 192.168.10.2 dari switch berhasil.
 🔸 Tunggu lebih lama. Packet Tracer kadang butuh beberapa menit untuk registrasi AP. ⏱️
+PENUTUP
+Demikian project "Konfigurasi Wireless Controller Cisco untuk WiFi Tempat Wisata Alam" ini dibuat sebagai bentuk penerapan ilmu jaringan komputer, khususnya dalam bidang teknologi jaringan nirkabel (wireless networking).
